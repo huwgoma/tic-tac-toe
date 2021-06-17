@@ -29,8 +29,6 @@ class Board
     [0,4,8], [2,4,6]
   ]
 
-  
-
 end
 
 
@@ -70,6 +68,7 @@ class Game
       self.reprompt_input
       self.update_cells
       board.display_board
+      self.switch_current_player
     end
     #binding.pry
   end
@@ -116,6 +115,12 @@ class Game
     board.cells[target_index] = current_player.player_symbol
   end
   
+  def switch_current_player
+    binding.pry
+    self.current_player = (current_player.player_id == 1)? player_2 : player_1
+    p current_player
+  end
+
 
   
   
@@ -123,11 +128,6 @@ end
 
 Game.new.play_game
 
-a = "a"
-
-# game.prompt_player_1
-# game.prompt_player_2
-# game.instantiate_players
 
 
 
