@@ -16,7 +16,20 @@ class Board
     BOARD
   end
 
+  
+  def game_over?
+    cells.all? {|cell| cell == "X" || cell == "O"} 
+    #||
+    #WIN_CONDITIONS.any? do |win_condition|
+  end
   private
+  WIN_CONDITIONS = [
+    [0,1,2], [3,4,5], [6,7,9],
+    [0,3,6], [1,4,7], [2,5,8],
+    [0,4,8], [2,4,6]
+  ]
+
+  
 
 end
 
@@ -47,20 +60,18 @@ class Game
     @current_player = player_1
     
     self.instantiate_board
-    
-    
+    board.display_board
   end
 
   def play_game
-    board.display_board
-    
-    self.get_current_player_move
+    while(!board.game_over?)
+      self.get_current_player_move
 
-    self.reprompt_input
-    self.update_cells
-    board.display_board
-    
-    binding.pry
+      self.reprompt_input
+      self.update_cells
+      board.display_board
+    end
+    #binding.pry
   end
   
   private 
@@ -90,7 +101,7 @@ class Game
   end
 
   def valid_number?
-    board.cells.include?(current_player_move)
+    current_player_move.between?(1,9) && board.cells.include?(current_player_move)
   end
 
   def reprompt_input
