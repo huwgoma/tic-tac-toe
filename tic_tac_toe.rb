@@ -18,6 +18,20 @@ class Board
     BOARD
   end
 
+  def get_board_tie?
+    board_tie?
+  end
+
+  def get_has_winner?
+    has_winner?
+  end
+
+  def check_game_over?
+    game_over?
+  end
+  
+  private
+
   def board_tie?
     cells.all? {|cell| cell == "X" || cell == "O"}
   end
@@ -32,7 +46,7 @@ class Board
     board_tie? || has_winner?
   end
 
-  private
+  
   
   WIN_CONDITIONS = {
     rows: [[0,1,2], [3,4,5], [6,7,9]],
@@ -96,17 +110,17 @@ class Game
   end
 
   def play_game
-    while(!board.game_over?)
+    while(!board.check_game_over?)
       self.get_current_player_move
       self.reprompt_input
 
       self.update_cells
       board.display_board
       
-      if(board.game_over?)
-        if(board.has_winner?)
+      if(board.check_game_over?)
+        if(board.get_has_winner?)
           puts self.put_winner
-        elsif(board.board_tie?)
+        elsif(board.get_board_tie?)
           puts self.put_tie
         end
         if(replay_game?)
