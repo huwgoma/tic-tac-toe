@@ -18,16 +18,27 @@ class Board
 
   
   def game_over?
-    cells.all? {|cell| cell == "X" || cell == "O"} 
-    #||
-    #WIN_CONDITIONS.any? do |win_condition|
+    cells.all? {|cell| cell == "X" || cell == "O"} ||
+    rows_win?
+    
   end
   private
-  WIN_CONDITIONS = [
-    [0,1,2], [3,4,5], [6,7,9],
-    [0,3,6], [1,4,7], [2,5,8],
-    [0,4,8], [2,4,6]
-  ]
+  WIN_CONDITIONS = {
+    rows: [[0,1,2], [3,4,5], [6,7,9]],
+    columns: [[0,3,6], [1,4,7], [2,5,8]],
+    diagonals: [[0,4,8], [2,4,6]]
+  }
+  
+  def rows_win?
+    WIN_CONDITIONS[:rows].any? do |row|
+      cell_rows = row.map do |cell_index|
+        cells[cell_index]
+      end
+      cell_rows == ["X","X","X"] || cell_rows == ["O", "O", "O"]
+    end
+  end
+  
+
 
 end
 
@@ -70,7 +81,7 @@ class Game
       board.display_board
       self.switch_current_player
     end
-    #binding.pry
+    
   end
   
   private 
@@ -116,9 +127,7 @@ class Game
   end
   
   def switch_current_player
-    binding.pry
     self.current_player = (current_player.player_id == 1)? player_2 : player_1
-    p current_player
   end
 
 
@@ -126,7 +135,7 @@ class Game
   
 end
 
-Game.new.play_game
+game = Game.new.play_game
 
 
 
