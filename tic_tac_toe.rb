@@ -60,14 +60,15 @@ class Board
       cell_diagonal == ["X","X","X"] || cell_diagonal == ["O", "O", "O"]
     end
   end
-  
-
-
 end
 
 
 class Player 
   @@number_of_players = 0
+
+  def self.number_of_players=(value)
+    @@number_of_players = value
+  end
 
   def initialize(name)
     @name = name
@@ -78,7 +79,6 @@ class Player
 
   attr_reader :name, :player_id, :player_symbol
 
-  private
 end
 
 
@@ -103,30 +103,33 @@ class Game
       self.update_cells
       board.display_board
       
-      if(board.has_winner?)
-        #binding.pry
-        puts self.put_winner
-      elsif(board.board_tie?)
-        puts self.put_tie
+      if(board.game_over?)
+        if(board.has_winner?)
+          puts self.put_winner
+        elsif(board.board_tie?)
+          puts self.put_tie
+        end
+        if(replay_game?)
+          replay_game
+        else
+          puts "Thanks for playing!"
+        end
       else
         self.switch_current_player
       end
     end
-    
-
-    
   end
   
   private 
 
   def get_player_1_name
     puts "What is Player 1's name?"
-    @player_1_name = gets.chomp.to_s
+    @player_1_name = gets.chomp
   end
   
   def get_player_2_name
     puts "What is Player 2's name?"
-    @player_2_name = gets.chomp.to_s
+    @player_2_name = gets.chomp
   end
   
   def instantiate_players(player_1_name, player_2_name)
@@ -161,6 +164,7 @@ class Game
   
   def switch_current_player
     self.current_player = (current_player.player_id == 1)? player_2 : player_1
+    #binding.pry
   end
     
   def put_winner
@@ -171,6 +175,20 @@ class Game
     "It's a tie!"
   end
   
+  def replay_game?
+    replay_answer = ''
+    loop do 
+      puts "Play again? (Y/N)"
+      replay_answer = gets.chomp.downcase
+      break if (replay_answer != "y" || replay_answer != "n")
+    end
+    (replay_answer == 'y')? true : false
+  end
+
+  def replay_game
+    Player.number_of_players=(0)
+    Game.new.play_game
+  end
   
 end
 
