@@ -14,17 +14,26 @@ class Board
        #{cells[3]} | #{cells[4]} | #{cells[5]}
       ---+---+---
        #{cells[6]} | #{cells[7]} | #{cells[8]}
-       
+
     BOARD
   end
 
+  def board_tie?
+    cells.all? {|cell| cell == "X" || cell == "O"}
+  end
+
+  def has_winner?
+    rows_win? ||
+    columns_win? ||
+    diagonals_win? 
+  end
   
   def game_over?
-    cells.all? {|cell| cell == "X" || cell == "O"} ||
-    rows_win?
-    columns_win?
+    board_tie? || has_winner?
   end
+
   private
+  
   WIN_CONDITIONS = {
     rows: [[0,1,2], [3,4,5], [6,7,9]],
     columns: [[0,3,6], [1,4,7], [2,5,8]],
@@ -33,19 +42,22 @@ class Board
   
   def rows_win?
     WIN_CONDITIONS[:rows].any? do |row|
-      cell_rows = row.map do |cell_index|
-        cells[cell_index]
-      end
+      cell_rows = row.map {|cell_index| cells[cell_index]}
       cell_rows == ["X","X","X"] || cell_rows == ["O", "O", "O"]
     end
   end
 
   def columns_win?
     WIN_CONDITIONS[:columns].any? do |column|
-      cell_columns = column.map do |cell_index|
-        cells[cell_index]
-      end
+      cell_columns = column.map {|cell_index| cells[cell_index]}
       cell_columns == ["X","X","X"] || cell_columns == ["O", "O", "O"]
+    end
+  end
+
+  def diagonals_win?
+    WIN_CONDITIONS[:diagonals].any? do |diagonal|
+      cell_diagonal = diagonal.map {|cell_index| cells[cell_index]}
+      cell_diagonal == ["X","X","X"] || cell_diagonal == ["O", "O", "O"]
     end
   end
   
@@ -86,12 +98,22 @@ class Game
   def play_game
     while(!board.game_over?)
       self.get_current_player_move
-
       self.reprompt_input
+
       self.update_cells
       board.display_board
-      self.switch_current_player
+      
+      if(board.has_winner?)
+        #binding.pry
+        puts self.put_winner
+      elsif(board.board_tie?)
+        puts self.put_tie
+      else
+        self.switch_current_player
+      end
     end
+    
+
     
   end
   
@@ -140,13 +162,19 @@ class Game
   def switch_current_player
     self.current_player = (current_player.player_id == 1)? player_2 : player_1
   end
+    
+  def put_winner
+    "#{current_player.name} wins!"
+  end
 
-
+  def put_tie
+    "It's a tie!"
+  end
   
   
 end
 
-game = Game.new.play_game
+Game.new.play_game
 
 
 
