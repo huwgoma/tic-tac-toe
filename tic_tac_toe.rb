@@ -8,11 +8,13 @@ class Board
   
   def display_board
     puts <<-BOARD
+
        #{cells[0]} | #{cells[1]} | #{cells[2]}
       ---+---+---
        #{cells[3]} | #{cells[4]} | #{cells[5]}
       ---+---+---
        #{cells[6]} | #{cells[7]} | #{cells[8]}
+       
     BOARD
   end
 
@@ -20,7 +22,7 @@ class Board
   def game_over?
     cells.all? {|cell| cell == "X" || cell == "O"} ||
     rows_win?
-    
+    columns_win?
   end
   private
   WIN_CONDITIONS = {
@@ -35,6 +37,15 @@ class Board
         cells[cell_index]
       end
       cell_rows == ["X","X","X"] || cell_rows == ["O", "O", "O"]
+    end
+  end
+
+  def columns_win?
+    WIN_CONDITIONS[:columns].any? do |column|
+      cell_columns = column.map do |cell_index|
+        cells[cell_index]
+      end
+      cell_columns == ["X","X","X"] || cell_columns == ["O", "O", "O"]
     end
   end
   
