@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'pry'
 class Board
   def initialize
@@ -18,12 +19,12 @@ class Board
     BOARD
   end
 
-  def get_board_tie?
-    board_tie?
+  def full?
+    board_full?
   end
 
-  def get_has_winner?
-    has_winner?
+  def winner_exists?
+    board_has_winner?
   end
 
   def check_game_over?
@@ -32,46 +33,47 @@ class Board
   
   private
 
-  def board_tie?
-    cells.all? {|cell| cell == "X" || cell == "O"}
+  def board_full?
+    cells.all? { |cell| cell == 'X' || cell == 'O' }
   end
 
-  def has_winner?
+  def board_has_winner?
     rows_win? ||
-    columns_win? ||
-    diagonals_win? 
+      columns_win? ||
+      diagonals_win?
   end
-  
+
   def game_over?
-    board_tie? || has_winner?
+    board_full? || winner_exists?
   end
 
   
   
   WIN_CONDITIONS = {
-    rows: [[0,1,2], [3,4,5], [6,7,9]],
-    columns: [[0,3,6], [1,4,7], [2,5,8]],
-    diagonals: [[0,4,8], [2,4,6]]
-  }
+    rows: [[0, 1, 2], [3, 4, 5], [6, 7, 8]],
+    columns: [[0, 3, 6], [1, 4, 7], [2, 5, 8]],
+    diagonals: [[0, 4, 8], [2, 4, 6]]
+  }.freeze
   
   def rows_win?
+    
     WIN_CONDITIONS[:rows].any? do |row|
-      cell_rows = row.map {|cell_index| cells[cell_index]}
-      cell_rows == ["X","X","X"] || cell_rows == ["O", "O", "O"]
+      cell_rows = row.map { |cell_index| cells[cell_index] }
+      cell_rows == %w[X X X] || cell_rows == %w[O O O]
     end
   end
 
   def columns_win?
     WIN_CONDITIONS[:columns].any? do |column|
-      cell_columns = column.map {|cell_index| cells[cell_index]}
-      cell_columns == ["X","X","X"] || cell_columns == ["O", "O", "O"]
+      cell_columns = column.map { |cell_index| cells[cell_index] }
+      cell_columns == %w[X X X] || cell_columns == %w[O O O]
     end
   end
 
   def diagonals_win?
     WIN_CONDITIONS[:diagonals].any? do |diagonal|
-      cell_diagonal = diagonal.map {|cell_index| cells[cell_index]}
-      cell_diagonal == ["X","X","X"] || cell_diagonal == ["O", "O", "O"]
+      cell_diagonal = diagonal.map { |cell_index| cells[cell_index] }
+      cell_diagonal == %w[X X X] || cell_diagonal == %w[O O O]
     end
   end
 end
@@ -110,6 +112,7 @@ class Game
   end
 
   def play_game
+    #binding.pry
     while(!board.check_game_over?)
       self.get_current_player_move
       self.reprompt_input
@@ -118,9 +121,9 @@ class Game
       board.display_board
       
       if(board.check_game_over?)
-        if(board.get_has_winner?)
+        if(board.winner_exists?)
           puts self.put_winner
-        elsif(board.get_board_tie?)
+        elsif(board.full?)
           puts self.put_tie
         end
         if(replay_game?)
@@ -178,7 +181,6 @@ class Game
   
   def switch_current_player
     self.current_player = (current_player.player_id == 1)? player_2 : player_1
-    #binding.pry
   end
     
   def put_winner
