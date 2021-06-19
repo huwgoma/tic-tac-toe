@@ -63,17 +63,17 @@ class Board
   end
 
   def columns_win?
-    WIN_CONDITIONS[:columns].any? do |column|
-      cell_columns = column.map { |cell_index| cells[cell_index] }
-      cell_columns == %w[X X X] || cell_columns == %w[O O O]
+    cell_columns = WIN_CONDITIONS[:columns].map do |column|
+      column.map { |cell_index| cells[cell_index] }
     end
+    cell_columns.include?(%w[X X X]) || cell_columns.include?(%w[O O O])
   end
 
   def diagonals_win?
-    WIN_CONDITIONS[:diagonals].any? do |diagonal|
-      cell_diagonal = diagonal.map { |cell_index| cells[cell_index] }
-      cell_diagonal == %w[X X X] || cell_diagonal == %w[O O O]
+    cell_diagonal = WIN_CONDITIONS[:diagonals].any? do |diagonal|
+      diagonal.map { |cell_index| cells[cell_index] }
     end
+    cell_diagonal.include?(%w[X X X]) || cell_diagonal.include?(%w[O O O])
   end
 end
 
