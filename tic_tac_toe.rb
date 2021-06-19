@@ -56,11 +56,10 @@ class Board
   }.freeze
   
   def rows_win?
-    
-    WIN_CONDITIONS[:rows].any? do |row|
-      cell_rows = row.map { |cell_index| cells[cell_index] }
-      cell_rows == %w[X X X] || cell_rows == %w[O O O]
+    cell_rows = WIN_CONDITIONS[:rows].map do |row|
+      row.map { |cell_index| cells[cell_index] }
     end
+    cell_rows.include?(%w[X X X]) || cell_rows.include?(%w[O O O])
   end
 
   def columns_win?
