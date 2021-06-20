@@ -1,5 +1,8 @@
 # frozen_string_literal: true
+
 require 'pry'
+
+# Tic Tac Toe Board Class
 class Board
   def initialize
     @cells = Array(1..9)
@@ -47,8 +50,6 @@ class Board
     board_full? || winner_exists?
   end
 
-  
-  
   WIN_CONDITIONS = {
     rows: [[0, 1, 2], [3, 4, 5], [6, 7, 8]],
     columns: [[0, 3, 6], [1, 4, 7], [2, 5, 8]],
@@ -70,15 +71,15 @@ class Board
   end
 
   def diagonals_win?
-    cell_diagonal = WIN_CONDITIONS[:diagonals].any? do |diagonal|
+    cell_diagonal = WIN_CONDITIONS[:diagonals].map do |diagonal|
       diagonal.map { |cell_index| cells[cell_index] }
     end
     cell_diagonal.include?(%w[X X X]) || cell_diagonal.include?(%w[O O O])
   end
 end
 
-
-class Player 
+# Player Class
+class Player
   @@number_of_players = 0
 
   def self.number_of_players=(value)
@@ -89,68 +90,65 @@ class Player
     @name = name
     @@number_of_players += 1
     @player_id = @@number_of_players
-    @player_symbol = (@player_id == 1)? "X" : "O"  
+    @player_symbol = @player_id == 1 ? 'X' : 'O'
   end
 
   attr_reader :name, :player_id, :player_symbol
-
 end
 
-
+# Game-handling class
 class Game
-
-  attr_reader :player_1, :player_2, :board, :current_player_move
+  attr_reader :player_one, :player_two, :board, :current_player_move
   attr_accessor :current_player
 
   def initialize
-    self.instantiate_players(get_player_1_name, get_player_2_name)
-    @current_player = player_1
+    instantiate_players(get_player_one_name, get_player_two_name)
+    @current_player = player_one
     
-    self.instantiate_board
+    instantiate_board
     board.display_board
   end
 
   def play_game
-    #binding.pry
-    while(!board.check_game_over?)
-      self.get_current_player_move
-      self.reprompt_input
-
-      self.update_cells
+    until board.check_game_over?
+      get_current_player_move
+      reprompt_input
+      update_cells
       board.display_board
       
-      if(board.check_game_over?)
-        if(board.winner_exists?)
-          puts self.put_winner
-        elsif(board.full?)
-          puts self.put_tie
+      if board.check_game_over?
+        if board.winner_exists?
+          puts winner_message
+        elsif board.full?
+          puts tie_message
         end
-        if(replay_game?)
+        if replay_game?
           replay_game
         else
-          puts "Thanks for playing!"
+          puts 'Thanks for playing!'
         end
       else
-        self.switch_current_player
+        p current_player
+        switch_current_player
       end
     end
   end
   
-  private 
+  private
 
-  def get_player_1_name
+  def get_player_one_name
     puts "What is Player 1's name?"
-    @player_1_name = gets.chomp
+    @player_one_name = gets.chomp
   end
   
-  def get_player_2_name
+  def get_player_two_name
     puts "What is Player 2's name?"
-    @player_2_name = gets.chomp
+    @player_two_name = gets.chomp
   end
   
-  def instantiate_players(player_1_name, player_2_name)
-    @player_1 = Player.new(player_1_name)
-    @player_2 = Player.new(player_2_name)
+  def instantiate_players(player_one_name, player_two_name)
+    @player_one = Player.new(player_one_name)
+    @player_two = Player.new(player_two_name)
   end
 
   def instantiate_board
@@ -163,13 +161,13 @@ class Game
   end
 
   def valid_number?
-    current_player_move.between?(1,9) && board.cells.include?(current_player_move)
+    current_player_move.between?(1, 9) && board.cells.include?(current_player_move)
   end
 
   def reprompt_input
-    while(!valid_number?)
-      puts "Please enter a valid number!"
-      self.get_current_player_move
+    until valid_number?
+      puts 'Please enter a valid number!'
+      get_current_player_move
     end
   end
 
@@ -179,36 +177,32 @@ class Game
   end
   
   def switch_current_player
-    self.current_player = (current_player.player_id == 1)? player_2 : player_1
+    self.current_player = current_player.player_id == 1 ? player_two : player_one
   end
     
-  def put_winner
+  def winner_message
     "#{current_player.name} wins!"
   end
 
-  def put_tie
+  def tie_message
     "It's a tie!"
   end
   
   def replay_game?
     replay_answer = ''
-    loop do 
-      puts "Play again? (Y/N)"
+    loop do
+      puts 'Play again? (Y/N)'
       replay_answer = gets.chomp.downcase
-      break if (replay_answer != "y" || replay_answer != "n")
+      break if replay_answer != 'y' || replay_answer != 'n'
     end
-    (replay_answer == 'y')? true : false
+    replay_answer == 'y'
   end
 
   def replay_game
-    Player.number_of_players=(0)
+    Player.number_of_players = (0)
     Game.new.play_game
   end
   
 end
 
 Game.new.play_game
-
-
-
-
