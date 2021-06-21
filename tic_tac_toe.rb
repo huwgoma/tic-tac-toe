@@ -96,8 +96,55 @@ class Player
   attr_reader :name, :player_id, :player_symbol
 end
 
+# Module for storing game message methods
+module GameMessages
+  private 
+
+  def get_player_one_name
+    puts "What is Player 1's name?"
+    @player_one_name = gets.chomp
+  end
+
+  def get_player_two_name
+    puts "What is Player 2's name?"
+    @player_two_name = gets.chomp
+  end
+
+  def get_current_player_move
+    puts "#{current_player.name}, enter a number (1-9) corresponding to the grid cell you want to mark."
+    @current_player_move = gets.to_i
+  end
+  
+  def reprompt_input
+    until valid_number?
+      puts 'Please enter a valid number!'
+      get_current_player_move
+    end
+  end
+
+  def tie_message
+    "It's a tie!"
+  end
+  
+  def winner_message
+    "#{current_player.name} wins!"
+  end
+
+  def replay_game?
+    replay_answer = ''
+    loop do
+      puts 'Play again? (Y/N)'
+      replay_answer = gets.chomp.downcase
+      break if replay_answer != 'y' || replay_answer != 'n'
+    end
+    replay_answer == 'y'
+  end  
+end
+
 # Game-handling class
 class Game
+  include GameMessages
+
   attr_reader :player_one, :player_two, :board, :current_player_move
   attr_accessor :current_player
 
@@ -107,6 +154,7 @@ class Game
     
     instantiate_board
     board.display_board
+    play_game
   end
 
   def play_game
@@ -128,7 +176,6 @@ class Game
           puts 'Thanks for playing!'
         end
       else
-        p current_player
         switch_current_player
       end
     end
@@ -136,16 +183,6 @@ class Game
   
   private
 
-  def get_player_one_name
-    puts "What is Player 1's name?"
-    @player_one_name = gets.chomp
-  end
-  
-  def get_player_two_name
-    puts "What is Player 2's name?"
-    @player_two_name = gets.chomp
-  end
-  
   def instantiate_players(player_one_name, player_two_name)
     @player_one = Player.new(player_one_name)
     @player_two = Player.new(player_two_name)
@@ -155,20 +192,8 @@ class Game
     @board = Board.new
   end
 
-  def get_current_player_move
-    puts "#{current_player.name}, enter a number (1-9) corresponding to the grid cell you want to mark."
-    @current_player_move = gets.to_i
-  end
-
   def valid_number?
     current_player_move.between?(1, 9) && board.cells.include?(current_player_move)
-  end
-
-  def reprompt_input
-    until valid_number?
-      puts 'Please enter a valid number!'
-      get_current_player_move
-    end
   end
 
   def update_cells
@@ -179,30 +204,11 @@ class Game
   def switch_current_player
     self.current_player = current_player.player_id == 1 ? player_two : player_one
   end
-    
-  def winner_message
-    "#{current_player.name} wins!"
-  end
-
-  def tie_message
-    "It's a tie!"
-  end
-  
-  def replay_game?
-    replay_answer = ''
-    loop do
-      puts 'Play again? (Y/N)'
-      replay_answer = gets.chomp.downcase
-      break if replay_answer != 'y' || replay_answer != 'n'
-    end
-    replay_answer == 'y'
-  end
 
   def replay_game
     Player.number_of_players = (0)
     Game.new.play_game
   end
-  
 end
 
-Game.new.play_game
+Game.new
