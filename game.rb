@@ -6,10 +6,10 @@ class Game
   attr_accessor :current_player
 
   def initialize
-    create_players(get_player_one_name, get_player_two_name)
-    @current_player = player_one
-    
-    instantiate_board
+    @player_one = Player.new(get_player_one_name)
+    @player_two = Player.new(get_player_two_name)
+    @current_player = @player_one
+    @board = Board.new
     board.display_board
   end
 
@@ -39,14 +39,10 @@ class Game
   
   private
 
-  def create_players(player_one_name, player_two_name)
-    @player_one = Player.new(player_one_name)
-    @player_two = Player.new(player_two_name)
-  end
-
-  def instantiate_board
-    @board = Board.new
-  end
+  # def create_players(player_one_name, player_two_name)
+  #   @player_one = Player.new(player_one_name)
+  #   @player_two = Player.new(player_two_name)
+  # end
 
   def valid_number?
     current_player_move.between?(1, 9) && board.cells.include?(current_player_move)

@@ -4,12 +4,12 @@ module GameMessages
 
   def get_player_one_name
     puts "What is Player 1's name?"
-    @player_one_name = gets.chomp
+    gets.chomp
   end
 
   def get_player_two_name
     puts "What is Player 2's name?"
-    @player_two_name = gets.chomp
+    gets.chomp
   end
 
   def get_current_player_move
