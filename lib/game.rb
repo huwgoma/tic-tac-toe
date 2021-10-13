@@ -14,8 +14,8 @@ class Game
 
   def play
     board.display_board
-    until game_over?
-      binding.pry
+    until board.check_game_over?
+      #binding.pry
       get_current_player_move
       reprompt_input
       update_cells
