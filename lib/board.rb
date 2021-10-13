@@ -19,7 +19,7 @@ class Board
   end
 
   def win_conditions_met?
-    #false
+    [rows_win?, columns_win?, diagonals_win?].include?(true) 
   end
 
   def full?

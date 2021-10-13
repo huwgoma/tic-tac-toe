@@ -39,8 +39,7 @@ class Game
   end
   
   def game_over?
-    @board.win_conditions_met?
-    #board.win_conditions_met? || board.full?
+    board.win_conditions_met? || board.full?
   end
 
   def create_player(player_number)
