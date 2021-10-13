@@ -10,11 +10,13 @@ class Game
     @player_two = Player.new(get_player_two_name)
     @current_player = @player_one
     @board = Board.new
-    board.display_board
+    
   end
 
   def play
-    until board.check_game_over?
+    board.display_board
+    until game_over?
+      binding.pry
       get_current_player_move
       reprompt_input
       update_cells
@@ -37,12 +39,12 @@ class Game
     end
   end
   
-  private
+  def game_over?
+    board.win_conditions_met?
+    #board.win_conditions_met? || board.full?
+  end
 
-  # def create_players(player_one_name, player_two_name)
-  #   @player_one = Player.new(player_one_name)
-  #   @player_two = Player.new(player_two_name)
-  # end
+  private
 
   def valid_number?
     current_player_move.between?(1, 9) && board.cells.include?(current_player_move)

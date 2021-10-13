@@ -18,8 +18,12 @@ class Board
     BOARD
   end
 
+  def win_conditions_met?
+    #false
+  end
+
   def full?
-    board_full?
+    cells.all? { |cell| cell == 'X' || cell == 'O' }
   end
 
   def winner_exists?
