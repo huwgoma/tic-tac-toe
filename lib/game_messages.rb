@@ -1,17 +1,5 @@
 # Module for storing game message methods
 module GameMessages
-  private 
-
-  def get_player_one_name
-    puts "What is Player 1's name?"
-    gets.chomp
-  end
-
-  def get_player_two_name
-    puts "What is Player 2's name?"
-    gets.chomp
-  end
-
   def get_current_player_move
     puts "#{current_player.name}, enter a number (1-9) corresponding to the grid cell you want to mark."
     @current_player_move = gets.to_i

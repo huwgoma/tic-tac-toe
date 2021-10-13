@@ -1,17 +1,10 @@
 # Player Class
 class Player
-  @@number_of_players = 0
-
-  def self.number_of_players=(value)
-    @@number_of_players = value
-  end
-
-  def initialize(name)
+  attr_reader :name, :player_id, :player_symbol
+  
+  def initialize(name, number)
     @name = name
-    @@number_of_players += 1
-    @player_id = @@number_of_players
+    @player_id = number
     @player_symbol = @player_id == 1 ? 'X' : 'O'
   end
-
-  attr_reader :name, :player_id, :player_symbol
 end

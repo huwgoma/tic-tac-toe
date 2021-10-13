@@ -5,12 +5,11 @@ class Game
   attr_reader :player_one, :player_two, :board, :current_player_move
   attr_accessor :current_player
 
-  def initialize
-    @player_one = Player.new(get_player_one_name)
-    @player_two = Player.new(get_player_two_name)
+  def initialize(board = Board.new)
+    @player_one = create_player(1)
+    @player_two = create_player(2)
     @current_player = @player_one
-    @board = Board.new
-    
+    @board = board
   end
 
   def play
@@ -40,8 +39,14 @@ class Game
   end
   
   def game_over?
-    board.win_conditions_met?
+    @board.win_conditions_met?
     #board.win_conditions_met? || board.full?
+  end
+
+  def create_player(player_number)
+    puts "What is Player #{player_number}'s name?"
+    name = gets.chomp
+    Player.new(name, player_number)
   end
 
   private
