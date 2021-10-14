@@ -67,10 +67,6 @@ class Game
 
   private
 
-  def valid_number?(number)
-    player_move.between?(1, 9) && board.cells.include?(player_move)
-  end
-
   def update_cells
     target_index = board.cells.find_index(player_move)
     board.cells[target_index] = current_player.player_symbol

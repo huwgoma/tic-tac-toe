@@ -78,15 +78,30 @@ describe Game do
   describe '#player_input' do
     # Looping Script Method - Loop until a valid number (player move) is entered
     subject(:game_input) { described_class.new }
+    
+    before do
+      allow(game_input).to receive(:prompt_move_input)
+    end
 
-    it 'stops the loop when user_input is valid (verified); does not output error message' do
-      user_input = '6'
-      allow(game_input).to receive(:gets).and_return(user_input)
-      verified_input = 6
-      allow(game_input).to receive(:verify_input).and_return(verified_input)
+    context 'when the user_input is valid' do
+      it 'stops the loop; does not output error message' do
+        valid_input = '6'
+        allow(game_input).to receive(:gets).and_return(valid_input)
+        
+        expect(game_input).to_not receive(:puts).with('Please enter a valid number!')
+        game_input.player_input
+      end
+    end
 
-      expect(game_input).to_not receive(:puts).with('Please enter a valid number!')
-      game_input.player_input
+    context 'when the user_input is invalid once, then valid' do
+      it 'completes the loop once; outputs error message once' do
+        invalid_input = '0'
+        valid_input = '6'
+        allow(game_input).to receive(:gets).and_return(invalid_input, valid_input)
+
+        expect(game_input).to receive(:puts).with('Please enter a valid number!').once
+        game_input.player_input
+      end
     end
   end
 
