@@ -47,14 +47,56 @@ describe Board do
 
     context 'when none of the 3 rows are all Xs or all 0s' do
       it 'returns false' do
-        board_rows.instance_variable_set(:@cells, ['X', 'O', 'X', 'O', 'X', 'O', 'O', 'X', 8])
+        board_rows.instance_variable_set(:@cells, [0, 1, 2, 3, 4, 5, 6, 7, 8])
+        expect(board_rows.rows_win?).to be false
+      end
+
+      it 'returns false when a row consists of Xs AND Os' do
+        board_rows.instance_variable_set(:@cells, ['X', 'O', 'X', 3, 4, 5, 6, 7, 8])
         expect(board_rows.rows_win?).to be false
       end
     end
   end
 
+  describe '#columns_win?' do
+    # Query Method - Returns true if any column is all Xs or all Os
+    subject(:board_columns) { described_class.new }
 
+    context 'when any of the 3 columns are all Xs or all Os' do
+      it 'returns true' do
+        board_columns.instance_variable_set(:@cells, ['X', 1, 2, 'X', 4, 5, 'X', 7, 8])
+        expect(board_columns.columns_win?).to be true
+      end
+    end
 
+    context 'when none of the 3 columns are all Xs or all Os' do
+      it 'returns false' do
+        board_columns.instance_variable_set(:@cells, ['X', 'O', 'X', 'O', 'X', 'O', 'O', 'X', 'O'])
+        expect(board_columns.columns_win?).to be false
+      end
+    end
+  end
+
+  describe '#diagonals_win?' do
+    # Query Method - Returns true if either diagonal consists of all Xs or all Os
+    subject(:board_diagonals) { described_class.new }
+
+    context 'when either of the 2 diagonals are all Xs or all Os' do
+      it 'returns true' do
+        board_diagonals.instance_variable_set(:@cells, ['X', 'O', 'X', 'O', 'X', 'O', 'O', 'O', 'X'])
+        expect(board_diagonals.diagonals_win?).to be true
+        board_diagonals.instance_variable_set(:@cells, ['O', 'X', 'O', 'X', 'O', 'X', 'O', 'X', 'X'])
+        expect(board_diagonals.diagonals_win?).to be true
+      end
+    end
+
+    context 'when neither of the 2 diagonals consist of all Xs or all Os' do
+      it 'returns false' do
+        board_diagonals.instance_variable_set(:@cells, ['X', 'O', 'X', 'X', 'O', 'X', 'O', 'X', 'O'])
+        expect(board_diagonals.diagonals_win?).to be false
+      end
+    end
+  end
 
   describe '#full?' do
     # Query method - Returns true if the entire Board is filled with X/Os
