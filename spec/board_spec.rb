@@ -102,10 +102,14 @@ describe Board do
     # Query method - Returns true if the entire Board is filled with X/Os
     subject(:board_full) { described_class.new }
 
-    xit 'returns true when all @cells are either X or O' do
-      #allow(board_full).to receive(:cells).and_return
-        
-      #expect()
+    it 'returns true when all @cells are either X or O' do
+      board_full.instance_variable_set(:@cells, ['X', 'O', 'X', 'X', 'O', 'X', 'O', 'X', 'O'])
+      expect(board_full.full?).to be true
+    end
+
+    it 'returns false when not all cells are either X or 0' do
+      board_full.instance_variable_set(:@cells, [0, 'O', 'X', 'X', 'O', 'X', 'O', 'X', 'O'])
+      expect(board_full.full?).to be false
     end
   end
 end
