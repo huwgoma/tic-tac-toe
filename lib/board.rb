@@ -34,7 +34,7 @@ class Board
     game_over?
   end
   
-  private
+  #private
 
   def board_full?
     cells.all? { |cell| cell == 'X' || cell == 'O' }
@@ -56,21 +56,21 @@ class Board
   
   def rows_win?
     cell_rows = WIN_CONDITIONS[:rows].map do |row|
-      row.map { |cell_index| cells[cell_index] }
+      row.map { |index| cells[index] }
     end
     cell_rows.include?(%w[X X X]) || cell_rows.include?(%w[O O O])
   end
 
   def columns_win?
     cell_columns = WIN_CONDITIONS[:columns].map do |column|
-      column.map { |cell_index| cells[cell_index] }
+      column.map { |index| cells[index] }
     end
     cell_columns.include?(%w[X X X]) || cell_columns.include?(%w[O O O])
   end
 
   def diagonals_win?
     cell_diagonal = WIN_CONDITIONS[:diagonals].map do |diagonal|
-      diagonal.map { |cell_index| cells[cell_index] }
+      diagonal.map { |index| cells[index] }
     end
     cell_diagonal.include?(%w[X X X]) || cell_diagonal.include?(%w[O O O])
   end
