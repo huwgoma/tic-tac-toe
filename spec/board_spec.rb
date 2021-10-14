@@ -32,27 +32,27 @@ describe Board do
     
     context 'when any of the 3 rows are all Xs or all Os' do
       it 'returns true when the first row is all Xs or all 0s' do
-        board_rows.instance_variable_set(:@cells, ['X', 'X', 'X', 3, 4, 5, 6, 7, 8])
+        board_rows.instance_variable_set(:@cells, ['X', 'X', 'X', 4, 5, 6, 7, 8, 9])
         expect(board_rows.rows_win?).to be true
-        board_rows.instance_variable_set(:@cells, ['O', 'O', 'O', 3, 4, 5, 6, 7, 8])
+        board_rows.instance_variable_set(:@cells, ['O', 'O', 'O', 4, 5, 6, 7, 8, 9])
         expect(board_rows.rows_win?).to be true
       end 
 
       it 'returns true when any row consists of all Xs' do
-        board_rows.instance_variable_set(:@cells, [0, 1, 2, 'X', 'X', 'X', 6, 7, 8])
+        board_rows.instance_variable_set(:@cells, [1, 2, 3, 'X', 'X', 'X', 7, 8, 9])
         expect(board_rows.rows_win?).to be true
-        board_rows.instance_variable_set(:@cells, [0, 1, 2, 3, 4, 5, 'X', 'X', 'X'])
+        board_rows.instance_variable_set(:@cells, [1, 2, 3, 4, 5, 'X', 'X', 'X'])
       end
     end
 
     context 'when none of the 3 rows are all Xs or all 0s' do
       it 'returns false' do
-        board_rows.instance_variable_set(:@cells, [0, 1, 2, 3, 4, 5, 6, 7, 8])
+        board_rows.instance_variable_set(:@cells, [1, 2, 3, 4, 5, 6, 7, 8, 9])
         expect(board_rows.rows_win?).to be false
       end
 
       it 'returns false when a row consists of Xs AND Os' do
-        board_rows.instance_variable_set(:@cells, ['X', 'O', 'X', 3, 4, 5, 6, 7, 8])
+        board_rows.instance_variable_set(:@cells, ['X', 'O', 'X', 4, 5, 6, 7, 8, 9])
         expect(board_rows.rows_win?).to be false
       end
     end
@@ -64,7 +64,7 @@ describe Board do
 
     context 'when any of the 3 columns are all Xs or all Os' do
       it 'returns true' do
-        board_columns.instance_variable_set(:@cells, ['X', 1, 2, 'X', 4, 5, 'X', 7, 8])
+        board_columns.instance_variable_set(:@cells, ['X', 2, 3, 'X', 5, 6, 'X', 8, 9])
         expect(board_columns.columns_win?).to be true
       end
     end

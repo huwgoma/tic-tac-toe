@@ -1,14 +1,13 @@
 # Module for storing game message methods
 module GameMessages
-  def get_current_player_move
+  def prompt_move_input
     puts "#{current_player.name}, enter a number (1-9) corresponding to the grid cell you want to mark."
-    @current_player_move = gets.to_i
   end
   
   def reprompt_input
     until valid_number?
       puts 'Please enter a valid number!'
-      get_current_player_move
+      get_player_move
     end
   end
 

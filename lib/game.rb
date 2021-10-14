@@ -2,7 +2,7 @@
 class Game
   include GameMessages
 
-  attr_reader :player_one, :player_two, :board, :current_player_move
+  attr_reader :player_one, :player_two, :board, :player_move
   attr_accessor :current_player
 
   def initialize(board = Board.new)
@@ -14,30 +14,47 @@ class Game
 
   def play
     board.display_board
-    until board.check_game_over?
-      #binding.pry
-      get_current_player_move
-      reprompt_input
-      update_cells
-      board.display_board
+    # until game_over?
+    #   get_player_move
+    #   reprompt_input
+    #   update_cells
+    #   board.display_board
       
-      if board.check_game_over?
-        if board.winner_exists?
-          puts winner_message
-        elsif board.full?
-          puts tie_message
-        end
-        if replay_game?
-          replay_game
-        else
-          puts 'Thanks for playing!'
-        end
-      else
-        switch_current_player
-      end
-    end
+    #   if game_over?
+    #     if board.win_conditions_met?
+    #       puts winner_message
+    #     elsif board.full?
+    #       puts tie_message
+    #     end
+    #     if replay_game?
+    #       replay_game
+    #     else
+    #       puts 'Thanks for playing!'
+    #     end
+    #   else
+    #     switch_current_player
+    #   end
+    # end
   end
   
+  def game_loop 
+    player_input
+  end
+
+  def player_input
+    prompt_move_input
+    loop do
+      user_input = gets.chomp.to_i
+      verified_input = verify_input(user_input)
+      return verified_input if verified_input
+      puts 'Please enter a valid number!' 
+    end
+  end 
+
+  def verify_input(number)
+    return number if board.cells.include?(number)
+  end
+
   def game_over?
     board.win_conditions_met? || board.full?
   end
@@ -50,12 +67,12 @@ class Game
 
   private
 
-  def valid_number?
-    current_player_move.between?(1, 9) && board.cells.include?(current_player_move)
+  def valid_number?(number)
+    player_move.between?(1, 9) && board.cells.include?(player_move)
   end
 
   def update_cells
-    target_index = board.cells.find_index(current_player_move)
+    target_index = board.cells.find_index(player_move)
     board.cells[target_index] = current_player.player_symbol
   end
   
@@ -64,7 +81,6 @@ class Game
   end
 
   def replay_game
-    Player.number_of_players = (0)
-    Game.new.play_game
+    Game.new.play
   end
 end

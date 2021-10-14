@@ -18,6 +18,12 @@ class Board
     BOARD
   end
 
+  WIN_CONDITIONS = {
+    rows: [[0, 1, 2], [3, 4, 5], [6, 7, 8]],
+    columns: [[0, 3, 6], [1, 4, 7], [2, 5, 8]],
+    diagonals: [[0, 4, 8], [2, 4, 6]]
+  }.freeze
+
   def win_conditions_met?
     [rows_win?, columns_win?, diagonals_win?].include?(true) 
   end
@@ -25,34 +31,6 @@ class Board
   def full?
     cells.all? { |cell| cell == 'X' || cell == 'O' }
   end
-
-  def winner_exists?
-    board_has_winner?
-  end
-
-  def check_game_over?
-    game_over?
-  end
-  
-  #private
-
-  def board_full?
-    cells.all? { |cell| cell == 'X' || cell == 'O' }
-  end
-
-  def board_has_winner?
-    rows_win? || columns_win? || diagonals_win?
-  end
-
-  def game_over?
-    board_full? || winner_exists?
-  end
-
-  WIN_CONDITIONS = {
-    rows: [[0, 1, 2], [3, 4, 5], [6, 7, 8]],
-    columns: [[0, 3, 6], [1, 4, 7], [2, 5, 8]],
-    diagonals: [[0, 4, 8], [2, 4, 6]]
-  }.freeze
   
   def rows_win?
     cell_rows = WIN_CONDITIONS[:rows].map do |row|
