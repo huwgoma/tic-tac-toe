@@ -67,7 +67,7 @@ describe Game do
   describe '#game_loop' do
     # Looping Script Method - Will loop until game_over? - Test internal methods
     subject(:game_loop) { described_class.new(board) }
-    let(:board) { instance_double(Board) }
+    let(:board) { instance_double(Board, win_conditions_met?: false, full?: false) }
     let(:player) { instance_double(Player) }
 
     context "when sending #update_cells to Board" do
@@ -80,6 +80,12 @@ describe Game do
         current_player_symbol = 'X'
         expect(board).to receive(:update_cells).with(@input, current_player_symbol)
         game_loop.game_loop
+      end
+    end
+
+    context 'when game is not over' do
+      xit 'changes the current player' do
+        
       end
     end
   end
@@ -148,6 +154,27 @@ describe Game do
       allow(board).to receive(:cells).and_return([1, 2, 3, 4, 5, 'X', 7, 8, 9])
       invalid_number = 6
       expect(game_verify.verify_input(invalid_number)).to be nil
+    end
+  end
+
+
+  describe '#switch_current_player' do
+    # Command Method - Changes the @current_player to the other player
+    subject(:game_switch_player) { described_class.new }
+    let(:player_one) { instance_double(Player, id: 1) }
+    let(:player_two) { instance_double(Player, id: 2) }
+
+    before do
+      allow(game_switch_player).to receive(:player_one).and_return(player_one)
+      allow(game_switch_player).to receive(:player_two).and_return(player_two)
+    end
+
+    context 'when the current player is player 1' do
+      it 'switches the current player to player 2' do
+        game_switch_player.instance_variable_set(:@current_player, player_one)
+
+        expect { game_switch_player.switch_current_player }.to change { game_switch_player.current_player }.to (player_two)
+      end
     end
   end
 end

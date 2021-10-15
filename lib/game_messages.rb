@@ -3,13 +3,6 @@ module GameMessages
   def prompt_move_input
     puts "#{current_player.name}, enter a number (1-9) corresponding to the grid cell you want to mark."
   end
-  
-  def reprompt_input
-    until valid_number?
-      puts 'Please enter a valid number!'
-      get_player_move
-    end
-  end
 
   def tie_message
     "It's a tie!"

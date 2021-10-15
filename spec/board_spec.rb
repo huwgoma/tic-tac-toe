@@ -129,8 +129,6 @@ describe Board do
 
         expect{ board_update.update_cells(number, symbol) }.to change { board_update.cells[index] }.to(symbol)
       end
-
-      #commit after this
     end
   end
 end
