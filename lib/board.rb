@@ -52,4 +52,9 @@ class Board
     end
     cell_diagonal.include?(%w[X X X]) || cell_diagonal.include?(%w[O O O])
   end
+
+  def update_cells(number, symbol)
+    index = number - 1
+    @cells[index] = symbol
+  end
 end

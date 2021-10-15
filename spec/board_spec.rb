@@ -26,6 +26,7 @@ describe Board do
     end
   end
 
+
   describe '#rows_win?' do 
     # Query Method - Returns true if any row is all Xs or all Os
     subject(:board_rows) { described_class.new }
@@ -98,6 +99,7 @@ describe Board do
     end
   end
 
+
   describe '#full?' do
     # Query method - Returns true if the entire Board is filled with X/Os
     subject(:board_full) { described_class.new }
@@ -110,6 +112,25 @@ describe Board do
     it 'returns false when not all cells are either X or 0' do
       board_full.instance_variable_set(:@cells, [0, 'O', 'X', 'X', 'O', 'X', 'O', 'X', 'O'])
       expect(board_full.full?).to be false
+    end
+  end
+
+
+  describe '#update_cells' do
+    # Command Method - Changes the state of the board (@cells)
+    # => Test the change in state
+    subject(:board_update) { described_class.new }
+
+    context 'when given a number and a symbol(X/O)' do
+      it 'changes the cell corresponding to the given number to the given symbol' do
+        number = 6 
+        index = number - 1
+        symbol = 'X'
+
+        expect{ board_update.update_cells(number, symbol) }.to change { board_update.cells[index] }.to(symbol)
+      end
+
+      #commit after this
     end
   end
 end

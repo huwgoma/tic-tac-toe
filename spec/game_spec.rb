@@ -13,7 +13,11 @@ describe Game do
     # create_player - Contains puts and gets statements and returns a Player object
   end
   
+
   describe '#game_over?' do
+    # Query Method - Returns true or false
+    # Method with outgoing Command - Test that messages are sent
+    
     subject(:game_over) { described_class.new(board) }
     let(:board) { instance_double(Board) }
     
@@ -34,7 +38,17 @@ describe Game do
       allow(board).to receive(:full?).and_return(false)
       expect(game_over.game_over?).to be false
     end
+
+    it 'sends #win_conditions_met? and #full? to Board' do
+      allow(board).to receive(:win_conditions_met?)
+      allow(board).to receive(:full?)
+      expect(board).to receive(:win_conditions_met?)
+      expect(board).to receive(:full?)
+
+      game_over.game_over?
+    end
   end
+
 
   describe '#play' do 
     # Looping Script Method - Test all inside methods
@@ -49,15 +63,27 @@ describe Game do
     end
   end
 
+
   describe '#game_loop' do
-    # Looping Script Method - Will loop until game_over?
+    # Looping Script Method - Will loop until game_over? - Test internal methods
     subject(:game_loop) { described_class.new(board) }
     let(:board) { instance_double(Board) }
+    let(:player) { instance_double(Player) }
 
-    xit "calls #player_input to collect the current player's move choice" do
-      
+    context "when sending #update_cells to Board" do
+      before do
+        @input = 6
+        allow(game_loop).to receive(:player_input).and_return(@input)
+      end
+
+      it 'sends #update_cells to Board with the current player symbol' do
+        current_player_symbol = 'X'
+        expect(board).to receive(:update_cells).with(@input, current_player_symbol)
+        game_loop.game_loop
+      end
     end
   end
+
 
   describe '#prompt_move_input' do
     # Puts method - Just test whether it asks @current_player for its name
@@ -68,12 +94,13 @@ describe Game do
       current_player_name = 'Lei'
       allow(player).to receive(:name).and_return(current_player_name)
       game_prompt.instance_variable_set(:@current_player, player)
+      
       expect(player).to receive(:name).and_return(current_player_name)
-
       game_prompt.prompt_move_input
     end
 
   end
+
 
   describe '#player_input' do
     # Looping Script Method - Loop until a valid number (player move) is entered
@@ -104,6 +131,7 @@ describe Game do
       end
     end
   end
+
 
   describe '#verify_input' do
     # Query Method - Returns the given number if it is valid; otherwise returns nil(?)

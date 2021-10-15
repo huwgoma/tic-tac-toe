@@ -38,7 +38,12 @@ class Game
   end
   
   def game_loop 
-    player_input
+    input = player_input
+    board.update_cells(input, current_player.symbol)
+    # Ask Board to update cells - #player_input returns the player's number (eg. 6)
+    # Find the index of the given number (eg. 6 on the tic tac toe board corresponds
+    # to @cells[index 5]
+    # Update the target cell (cell at index 5) to the current player's symbol
   end
 
   def player_input
@@ -67,10 +72,10 @@ class Game
 
   private
 
-  def update_cells
-    target_index = board.cells.find_index(player_move)
-    board.cells[target_index] = current_player.player_symbol
-  end
+  # def update_cells
+  #   target_index = board.cells.find_index(player_move)
+  #   board.cells[target_index] = current_player.symbol
+  # end
   
   def switch_current_player
     self.current_player = current_player.player_id == 1 ? player_two : player_one
