@@ -11,14 +11,4 @@ module GameMessages
   def winner_message
     "#{current_player.name} wins!"
   end
-
-  def replay_game?
-    replay_answer = ''
-    loop do
-      puts 'Play again? (Y/N)'
-      replay_answer = gets.chomp.downcase
-      break if replay_answer != 'y' || replay_answer != 'n'
-    end
-    replay_answer == 'y'
-  end  
 end
