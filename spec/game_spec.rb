@@ -83,11 +83,6 @@ describe Game do
       end
     end
 
-    context 'when game is not over' do
-      xit 'changes the current player' do
-        
-      end
-    end
   end
 
 
@@ -173,7 +168,15 @@ describe Game do
       it 'switches the current player to player 2' do
         game_switch_player.instance_variable_set(:@current_player, player_one)
 
-        expect { game_switch_player.switch_current_player }.to change { game_switch_player.current_player }.to (player_two)
+        expect { game_switch_player.switch_current_player }.to change { game_switch_player.current_player }.to(player_two)
+      end
+    end
+
+    context 'when the current player is player 2' do
+      it 'switches the current player to player 1' do
+        game_switch_player.instance_variable_set(:@current_player, player_two)
+
+        expect { game_switch_player.switch_current_player}.to change { game_switch_player.current_player }.to(player_one)
       end
     end
   end
