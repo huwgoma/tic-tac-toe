@@ -68,7 +68,7 @@ describe Game do
   describe '#game_loop' do
     # Looping Script Method - Will loop until game_over? - Test internal methods
     subject(:game_loop) { described_class.new(board) }
-    let(:board) { instance_double(Board, win_conditions_met?: false, full?: false) }
+    let(:board) { instance_double(Board).as_null_object }
     let(:player) { instance_double(Player) }
 
     context "when sending #update_cells to Board" do
@@ -80,6 +80,11 @@ describe Game do
       it 'sends #update_cells to Board with the current player symbol' do
         current_player_symbol = 'X'
         expect(board).to receive(:update_cells).with(@input, current_player_symbol)
+        game_loop.game_loop
+      end
+
+      it 'displays the Board' do
+        expect(board).to receive(:display_board)
         game_loop.game_loop
       end
     end
@@ -213,16 +218,16 @@ describe Game do
   end
 
 
-  # describe '#replay' do
-  #   subject(:game_replay) { described_class.new }
+  describe '#replay' do
+    subject(:game_replay) { described_class.new }
 
-  #   context 'when user enters Y in response to replay prompt' do
-  #     it 'creates a new Game instance' do
-  #       expect(Game).to receive(:new)
-  #       game_replay.replay
-  #     end
-  #   end
-  # end
+    context 'when user enters anything other than Y in response to replay prompt' do
+      it "puts 'Thanks for playing!" do
+        expect(game_replay).to receive(:puts).with('Thanks for playing!')
+        game_replay.replay
+      end
+    end
+  end
 end
 
 

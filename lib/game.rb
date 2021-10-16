@@ -17,32 +17,12 @@ class Game
     game_loop until game_over?
     game_end
     replay
-    # until game_over?
-    #   get_player_move
-    #   reprompt_input
-    #   update_cells
-    #   board.display_board
-      
-    #   if game_over?
-    #     if board.win_conditions_met?
-    #       puts winner_message
-    #     elsif board.full?
-    #       puts tie_message
-    #     end
-    #     if replay_game?
-    #       replay_game
-    #     else
-    #       puts 'Thanks for playing!'
-    #     end
-    #   else
-    #     switch_current_player
-    #   end
-    # end
   end
   
   def game_loop 
     input = player_input
     board.update_cells(input, current_player.symbol)
+    board.display_board
     switch_current_player unless game_over?
   end
 
@@ -78,16 +58,9 @@ class Game
     puts board.win_conditions_met? ? winner_message : tie_message
   end
 
-  # def replay
-  #   "Play again? (Y/N)"
-  #   input = gets.chomp
-  #   Game.new
-  # end
-
-
-
-
-  def replay_game
-    Game.new.play
+  def replay
+    puts "Play again? (Y/N)"
+    input = gets.chomp.downcase
+    input == 'y' ? Game.new.play : puts('Thanks for playing!')
   end
 end
