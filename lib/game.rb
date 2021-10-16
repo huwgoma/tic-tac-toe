@@ -16,7 +16,7 @@ class Game
     board.display_board
     game_loop until game_over?
     game_end
-    
+    replay
     # until game_over?
     #   get_player_move
     #   reprompt_input
@@ -78,7 +78,11 @@ class Game
     puts board.win_conditions_met? ? winner_message : tie_message
   end
 
-
+  # def replay
+  #   "Play again? (Y/N)"
+  #   input = gets.chomp
+  #   Game.new
+  # end
 
 
 

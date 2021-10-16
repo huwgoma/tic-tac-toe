@@ -211,6 +211,18 @@ describe Game do
       end
     end
   end
+
+
+  # describe '#replay' do
+  #   subject(:game_replay) { described_class.new }
+
+  #   context 'when user enters Y in response to replay prompt' do
+  #     it 'creates a new Game instance' do
+  #       expect(Game).to receive(:new)
+  #       game_replay.replay
+  #     end
+  #   end
+  # end
 end
 
 
