@@ -53,14 +53,15 @@ describe Game do
   describe '#play' do 
     # Looping Script Method - Test all inside methods
     subject(:game_play) { described_class.new(board) }
-    let(:board) { instance_double(Board) }
+    let(:board) { instance_double(Board).as_null_object }
 
     it 'sends a message to Board to display the board' do
       allow(board).to receive(:display_board)
       expect(board).to receive(:display_board)
-
       game_play.play
     end
+
+    
   end
 
 
@@ -82,7 +83,6 @@ describe Game do
         game_loop.game_loop
       end
     end
-
   end
 
 
@@ -177,6 +177,37 @@ describe Game do
         game_switch_player.instance_variable_set(:@current_player, player_two)
 
         expect { game_switch_player.switch_current_player}.to change { game_switch_player.current_player }.to(player_one)
+      end
+    end
+  end
+
+
+  describe '#game_end' do
+    subject(:game_end) { described_class.new(board) }
+    let(:board) { instance_double(Board) }
+    let(:current_player) { instance_double(Player, name: 'Lei') }
+
+    context 'if Board#win_conditions_met is true' do
+      before do
+        allow(board).to receive(:win_conditions_met?).and_return(true)  
+        allow(game_end).to receive(:current_player).and_return(current_player)
+      end
+      
+      it "puts #winner_message with the @current_player" do
+        expect(game_end).to receive(:puts).with("Lei wins!")
+        game_end.game_end
+      end
+    end
+
+    context 'if Board#win_conditions_met is false' do
+      before do
+        allow(board).to receive(:win_conditions_met?).and_return(false)
+        allow(game_end).to receive(:current_player).and_return(current_player)
+      end
+
+      it 'puts #tie_message' do
+        expect(game_end).to receive(:puts).with("It's a tie!")
+        game_end.game_end
       end
     end
   end
